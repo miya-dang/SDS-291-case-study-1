@@ -219,73 +219,133 @@
 \maketitle
 
 
-\emph{Your written short report should be the first thing your reader
-encounters in your case study document. While you may choose to label
-each of the required components/sections of the short report with its
-own header (see below for an example of creating a header in Quarto),
-you do not need to do so provided that all of the required information
-is included. Your report should be self-contained and written in such a
-way that a quantitatively inclined friend (who has taken or is taking
-SDS 291) could follow what you did without necessarily knowing anything
-about the U.S. presidential election of 2000.}
+\subsubsection{Introduction}\label{introduction}
 
-\emph{As you write your report, you may wish to reference the guide to
-typesetting regression lines in Quarto using LaTeX (linked at the top of
-our class Moodle page), the Quarto help page for formatting documents
-using Markdown (https://quarto.org/docs/authoring/markdown-basics.html),
-and the Quarto help page for customizing the output from executed code
-chunks (https://quarto.org/docs/computations/execution-options.html).}
+The U.S. presidential election in 2000 between George W. Bush and Al
+Gore was one of the closest in history, with its final outcome dependent
+on the results in the state of Florida. Ultimately, Bush secured victory
+by a margin of fewer than 400 votes. However, Democratic voters in Palm
+Beach County argued that a confusing ``butterfly'' ballot layout led
+them to mistakenly vote for Reform Party candidate Pat Buchanan instead
+of Gore. This claim was supported by evidence showing that Buchanan
+received an unusually high percentage of votes in the county, along with
+a significant number of discarded ballots where voters had marked two
+choices.
 
-\subsubsection{An example section
-heading}\label{an-example-section-heading}
+In this case study, we will model the relationship between Bush and
+Buchanan votes in 2000 across Florida (excluding Palm Beach County to
+assess its anomaly) to answer two questions:
 
-\emph{When you create plots for your case study report, the
-\texttt{echo:\ false} chunk option tells Quarto to include the final
-output of your R commands (in this case, a plot) in your rendered PDF
-\emph{without} printing the underlying R commands that generated that
-plot! The message and warning flags both prevent R from printing any
-additional text with error messages or warnings to the PDF.}
+\begin{itemize}
+\tightlist
+\item
+  \emph{Was the number of votes for Buchanan in Palm Beach County
+  statistically unusual compared to other Florida counties?}
+\item
+  \emph{What is the estimated number of votes intended for Gore but cast
+  for Buchanan in Palm Beach County?}
+\end{itemize}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-2-1.pdf}
+\subsubsection{Data Description}\label{data-description}
 
-\emph{When reporting the results of your regression analysis, I would
-like you to write out a mathematical description of the main/final
-population model for the mean. Here is an example of what that might
-look like:}
+The dataset contains the vote counts for Buchanan and Bush in 2000
+across all 67 counties in Florida.
 
-Let \(mort_i\) denote the heart disease mortality rate in country \(i\)
-(measured in deaths per 1,000 individuals) and \(wine_i\) denote the
-consumption of wine (measured in liters per person per year). Our final
-linear regression model is
-\[E[mort_i | wine_i] = \beta_0 + \beta_1\left(wine_i\right).\]
+\textbf{Summary Statistics:}
 
-\emph{You do not need to write out the fitted regression line, but you
-should (at a minimum) provide a table summarizing the estimated
-coefficients of the model and their corresponding standard errors, like
-the one shown below. A print-out from the \texttt{summary()} command
-alone is not sufficient.}
+\begin{verbatim}
+    Bush2000       Buchanan2000   
+ Min.   :  1316   Min.   :   9.0  
+ 1st Qu.:  4746   1st Qu.:  46.5  
+ Median : 20196   Median : 114.0  
+ Mean   : 43356   Mean   : 258.5  
+ 3rd Qu.: 56542   3rd Qu.: 285.5  
+ Max.   :289456   Max.   :3407.0  
+\end{verbatim}
 
-\begin{table}[H]
-\centering
-\begin{tabular}[t]{lcccc}
-\toprule
-  & Name for Col. 1 & Name for Col. 2 & Name for Col. 3 & Name for Col. 4\\
-\midrule
-(Intercept) & 7.69 & 0.47 & 16.24 & 0e+00\\
-Wine & -0.08 & 0.02 & -4.48 & 4e-04\\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{itemize}
+\item
+  Summary statistics indicate that, overall, Bush received significantly
+  higher votes than Buchanan.
+\item
+  Both variables have means much higher than their medians, indicating a
+  strong right skew. This suggests that most counties had relatively low
+  vote counts, while a small number had exceptionally high vote counts.
+\item
+  The maximum number of Buchanan votes was 3,407, far exceeding the
+  third quantile of 285.5. This vote count came from Palm Beach County,
+  suggesting that it is an outlier.
+\end{itemize}
 
-\section{R Appendix}\label{r-appendix}
+\textbf{Accompanying Graph:}
 
-\emph{Copy and paste all code that you used for your case study into one
-chunk at the end of your written report. Before submitting your case
-study, take one final look at the R Appendix and make sure that all code
-is clearly visible. If you see a line running off the side of the PDF,
-please split the code over multiple lines using a linebreak. The header
-at the top of this template should ensure that lines of code are
-automatically wrapped in your final document.}
+The scatterplot below visualizes the relationship between Bush votes
+(x-axis) and Buchanan votes (y-axis) for all 67 counties:
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-3-1.pdf}
+
+There is a general positive trend, as counties with more Bush votes also
+tended to have more Buchanan votes. Palm Beach County (the mark on the
+top of the graph) is a notable outlier with unexpectedly high Buchanan
+votes (3,407).
+
+\subsubsection{Modeling Process and
+Results}\label{modeling-process-and-results}
+
+Let \(Buchanan\) denote the votes for Buchanan in Palm Beach County and
+\(Bush\) denote the the votes for Bush in Palm Beach County. Our final
+linear regression model is:
+\[E[log(Buchanan) | log(Bush)] = \beta_0 + \beta_1\left(Bush\right).\]
+
+The prediction interval is \([365, 831]\). We are 95\% confident that
+the votes for Buchanan when there are 152846 votes for Bush will fall
+between 365 votes and 831 votes.
+
+Buchanan's real vote from Palm Beach County in 2000 election is 3407
+votes. Compared to the prediction interval above, we can calculate that
+an estimate for the likely number of votes intended for Gore but cast
+for Buchanan in Palm Beach County falls between \([2576, 3042]\).
+
+\subsubsection{Summary and Conclusions}\label{summary-and-conclusions}
+
+\textbf{Key Findings}
+
+\begin{itemize}
+\item
+  The Buchanan vote count in Palm Beach County during the 2000 election
+  was statistically unusual.
+\item
+  An estimated 2,576 to 3,042 votes intended for Gore were likely
+  miscast for Buchanan.
+\item
+  These results suggest that the ballot design may have altered the
+  election outcome. Given that Gore lost Florida by fewer than 400
+  votes, the potential miscast votes in Palm Beach County alone far
+  exceed this margin.
+\end{itemize}
+
+\textbf{Limitations}
+
+\begin{itemize}
+\item
+  The log-log transformation assumes a multiplicative relationship
+  between Bush and Buchanan votes. While this improved linearity,
+  residual diagnostics revealed mild heteroscedasticity and a slightly
+  left-skewed residual distribution. These imply that the prediction
+  interval may underestimate uncertainty, particularly for counties with
+  high Bush vote count like Palm Beach.
+\item
+  The model assumes that voter behavior is similar across all counties.
+  However, many other factors could contribute to regional differences
+  between voter behavior, such as candidate campaigns or other
+  demographic factors.
+\item
+  The analysis demonstrate association and not causation. Further
+  investigation would be necessary to definitively prove that the
+  butterfly ballot caused the excess Buchanan votes.
+\end{itemize}
+
+\subsection{R Appendix}\label{r-appendix}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -298,15 +358,29 @@ automatically wrapped in your final document.}
 \CommentTok{\# Loading the data for case study one}
 \NormalTok{election }\OtherTok{\textless{}{-}}\NormalTok{ Sleuth2}\SpecialCharTok{::}\NormalTok{ex0825}
 
-\CommentTok{\# Creating a second dataset with Palm Beach County excluded}
-\NormalTok{election\_wo\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{!=} \StringTok{"Palm Beach"}\NormalTok{)}
+\CommentTok{\# Summary statistics}
+\FunctionTok{summary}\NormalTok{(election }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(Bush2000, Buchanan2000))}
+\end{Highlighting}
+\end{Shaded}
 
-\CommentTok{\# Loading another dataset on wine consumption and heart disease mortality}
-\NormalTok{wine }\OtherTok{\textless{}{-}}\NormalTok{ Sleuth2}\SpecialCharTok{::}\NormalTok{ex0823}
+\begin{verbatim}
+    Bush2000       Buchanan2000   
+ Min.   :  1316   Min.   :   9.0  
+ 1st Qu.:  4746   1st Qu.:  46.5  
+ Median : 20196   Median : 114.0  
+ Mean   : 43356   Mean   : 258.5  
+ 3rd Qu.: 56542   3rd Qu.: 285.5  
+ Max.   :289456   Max.   :3407.0  
+\end{verbatim}
 
-\CommentTok{\# Creating a scatterplot for the relationship between mortality and wine consumption}
-\NormalTok{wine }\SpecialCharTok{|\textgreater{}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Wine, }\AttributeTok{y =}\NormalTok{ Mortality)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Association between wine consumption and mortality rates."}\NormalTok{)}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating a scatterplot for the relationship between Bush and Buchanan votes}
+\NormalTok{election }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Bush2000,}
+             \AttributeTok{y =}\NormalTok{ Buchanan2000)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Association between Bush votes and Buchanan votes"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -314,30 +388,143 @@ automatically wrapped in your final document.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Fitting and summarizing the regression line for mean mortality }
-\CommentTok{\# as a function of wine consumption}
-\NormalTok{wine.lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Mortality }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Wine, }\AttributeTok{data =}\NormalTok{ wine)}
-\NormalTok{wine.lm.table }\OtherTok{\textless{}{-}}\NormalTok{ wine.lm }\SpecialCharTok{|\textgreater{}} \FunctionTok{tidy}\NormalTok{()}
-\NormalTok{wine.lm.table }\SpecialCharTok{|\textgreater{}} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Name for Col. 1"}\NormalTok{, }\StringTok{"Name for Col. 2"}\NormalTok{, }
-                                   \StringTok{"Name for Col. 3"}\NormalTok{, }\StringTok{"Name for Col. 4"}\NormalTok{, }
-                                   \StringTok{"Name for Col. 5"}\NormalTok{), }
-                     \AttributeTok{align =} \StringTok{"c"}\NormalTok{, }\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{linesep=}\StringTok{""}\NormalTok{, }
-                     \AttributeTok{digits =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} 
+\CommentTok{\# Creating a second dataset with Palm Beach County excluded}
+\NormalTok{election\_wo\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{!=} \StringTok{"Palm Beach"}\NormalTok{)}
+
+\CommentTok{\# Fitting and summarizing the regression line for mean Buchanan votes }
+\CommentTok{\# as a function of Bush votes}
+\NormalTok{election\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Buchanan2000 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Bush2000, }\AttributeTok{data =}\NormalTok{ election\_wo\_pb)}
+\FunctionTok{summary}\NormalTok{(election\_lm)}\SpecialCharTok{$}\NormalTok{coefficients}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                Estimate   Std. Error   t value     Pr(>|t|)
+(Intercept) 65.573496362 1.733043e+01  3.783721 3.427131e-04
+Bush2000     0.003481898 2.500903e-04 13.922562 4.916245e-21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{election\_lm\_table }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(election\_lm)}\SpecialCharTok{$}\NormalTok{coefficients}
+
+\CommentTok{\# Creating the table summarizing the estimated coefficients of the model }
+\CommentTok{\# and their corresponding standard errors}
+\NormalTok{election\_lm\_table }\SpecialCharTok{|\textgreater{}} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Estimate"}\NormalTok{, }\StringTok{"Std. Error"}\NormalTok{,}
+                                       \StringTok{"t value"}\NormalTok{, }\StringTok{"Pr(\textgreater{}|t|)"}\NormalTok{), }
+                         \AttributeTok{align =} \StringTok{"c"}\NormalTok{,}
+                         \AttributeTok{booktabs =}\NormalTok{ T,}
+                         \AttributeTok{linesep=}\StringTok{""}\NormalTok{,}
+                         \AttributeTok{digits =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"HOLD\_position"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[H]
 \centering
-\begin{tabular}[t]{ccccc}
+\begin{tabular}[t]{lcccc}
 \toprule
-Name for Col. 1 & Name for Col. 2 & Name for Col. 3 & Name for Col. 4 & Name for Col. 5\\
+  & Estimate & Std. Error & t value & Pr(>|t|)\\
 \midrule
-(Intercept) & 7.69 & 0.47 & 16.2396 & 0\\
-Wine & -0.08 & 0.02 & -4.4750 & 0\\
+(Intercept) & 65.5735 & 17.3304 & 3.7837 & 3e-04\\
+Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating the residuals{-}fitted plot to check }
+\CommentTok{\# Linearity and Equal Variance for the election model}
+\NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .fitted, }\AttributeTok{y =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Fitted Values"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Residuals"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating the Q{-}Q plot as check Normality for the election model}
+\NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq\_line}\NormalTok{(}\AttributeTok{col =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Theoretical Quantiles"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Sample Quantiles"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Transformation}
+\NormalTok{transformed\_election\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(Buchanan2000) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(Bush2000), election\_wo\_pb)}
+
+\CommentTok{\# Creating the residuals{-}fitted plot to check }
+\CommentTok{\# Linearity and Equal Variance for the transformed election model}
+\NormalTok{transformed\_election\_lm }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .fitted, }\AttributeTok{y =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Fitted Values"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Residuals"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating the Q{-}Q plot as check Normality for the transformed election model}
+\NormalTok{transformed\_election\_lm }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq\_line}\NormalTok{(}\AttributeTok{col =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Theoretical Quantiles"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Sample Quantiles"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter the original dataset to only Palm Beach Country}
+\CommentTok{\# to create prediction interval}
+\NormalTok{election\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{==} \StringTok{"Palm Beach"}\NormalTok{)}
+
+\CommentTok{\# Creating a 95\% prediction interval for the number of}
+\CommentTok{\# predicted Buchanan votes in Palm Beach County}
+\CommentTok{\# after knowing the votes for Bush from Palm Beach County}
+\NormalTok{new\_election }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Bush2000 =} \DecValTok{152846}\NormalTok{)}
+\NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{augment}\NormalTok{(}\AttributeTok{newdata =}\NormalTok{ new\_election,}
+          \AttributeTok{interval =} \StringTok{"prediction"}\NormalTok{,}
+          \AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 1 x 4
+  Bush2000 .fitted .lower .upper
+     <dbl>   <dbl>  <dbl>  <dbl>
+1   152846    598.   365.   831.
+\end{verbatim}
 
 
 
