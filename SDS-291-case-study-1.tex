@@ -44,28 +44,14 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 % Make \paragraph and \subparagraph free-standing
-\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}{
-    \@ifstar
-      \xxxParagraphStar
-      \xxxParagraphNoStar
-  }
-  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
-  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}{
-    \@ifstar
-      \xxxSubParagraphStar
-      \xxxSubParagraphNoStar
-  }
-  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
-  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-\makeatother
 
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -85,7 +71,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -95,7 +81,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -152,6 +138,10 @@
 \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
 \KOMAoption{captions}{tableheading}
 \makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
@@ -187,21 +177,27 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
-\makeatother
-\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\usepackage{bookmark}
-
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Case Study 1: Your Informative Title Here},
+  pdftitle={Case Study 1: Statistically Analyse the Anomaly in the U.S. 2000 Presidential Election},
   pdfauthor={Miya Dang, Mia Tran},
   colorlinks=true,
   linkcolor={blue},
@@ -210,16 +206,17 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-
-\title{Case Study 1: Your Informative Title Here}
+\title{Case Study 1: Statistically Analyse the Anomaly in the U.S. 2000
+Presidential Election}
 \author{Miya Dang, Mia Tran}
 \date{2025-03-05}
 
 \begin{document}
 \maketitle
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, boxrule=0pt, breakable]}{\end{tcolorbox}}\fi
 
-
-\subsubsection{Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\subsubsection{Introduction}\label{introduction}}
 
 The U.S. presidential election in 2000 between George W. Bush and Al
 Gore was one of the closest in history, with its final outcome dependent
@@ -246,7 +243,8 @@ assess its anomaly) to answer two questions:
   for Buchanan in Palm Beach County?}
 \end{itemize}
 
-\subsubsection{Data Description}\label{data-description}
+\hypertarget{data-description}{%
+\subsubsection{Data Description}\label{data-description}}
 
 The dataset contains the vote counts for Buchanan and Bush in 2000
 across all 67 counties in Florida.
@@ -287,26 +285,165 @@ The scatterplot below visualizes the relationship between Bush votes
 There is a general positive trend, as counties with more Bush votes also
 tended to have more Buchanan votes. Palm Beach County (the mark on the
 top of the graph) is a notable outlier with unexpectedly high Buchanan
-votes (3,407).
+votes (3,407). This graph shows that the data is highly left-skewed,
+raising concerns about potential violations of model assumptions, which
+we will examine in the next section.
 
+\hypertarget{modeling-process-and-results}{%
 \subsubsection{Modeling Process and
-Results}\label{modeling-process-and-results}
+Results}\label{modeling-process-and-results}}
 
-Let \(Buchanan\) denote the votes for Buchanan in Palm Beach County and
-\(Bush\) denote the the votes for Bush in Palm Beach County. Our final
+Originally, we fitted a simple linear regression model for predicting
+Buchanan votes from Bush votes. Let \(Buchanan\) denote the votes for
+Buchanan in Palm Beach County and \(Bush\) denote the votes for Bush in
+Palm Beach County. Our original model is in the form:
+\[Buchanan = \beta_0 + \beta_1\left(Bush\right).\] where:
+
+\begin{itemize}
+\tightlist
+\item
+  \(\beta_0\) is the intercept of the model, representing the expected
+  value of the number of votes for Buchanan when the number of votes for
+  Bush is 0.
+\end{itemize}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\beta_1\) represents the percentage change in Buchanan's votes for a
+  1\% increase in Bush's votes. The table below shows the summary
+  statistics of the simple linear regression model:
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{lcccc}
+\toprule
+  & Estimate & Std. Error & t value & Pr(>|t|)\\
+\midrule
+(Intercept) & 65.5735 & 17.3304 & 3.7837 & 0.00034\\
+Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0.00000\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We proceeded to check the conditions for t-based inference with the
+simple linear regression model above. According to the data context, the
+Independence assumption is likely satisfied since the data consists of
+separate observations for each county in Florida (excluding Palm Beach
+County). Since each county reports its election results independently,
+the votes counted in one county do not directly influence the votes in
+another. Additionally, while counties may share some similarities, they
+operate as distinct political and administrative entities, each with its
+own local voting trends, demographics, and electoral processes, reducing
+the likelihood of systematic dependence between counties. The residual
+vs.~fitted value plot below allows us to check the Linearity and Equal
+Variance conditions:
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-6-1.pdf}
+
+The residuals vs.~fitted values plot indicates that both the Linearity
+and Equal Variance assumptions are violated. The clustering of residuals
+at the start of the line suggests a non-random pattern, violating the
+Linearity assumption. Additionally, the inconsistent vertical spread
+across fitted values indicates a lack of constant variance, suggesting a
+violation of the Equal Variance assumption.
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-7-1.pdf}
+
+The Q-Q plot suggests a violation of the Normality assumption, as the
+residuals deviate from the reference line not only at the extremes but
+also in the middle, indicating that they do not follow a normal
+distribution.
+
+Since the Linearity, Equal Variance, and Normality assumptions are
+violated, our simple linear regression model is not appropriate for
+modeling the relationship between Buchanan's votes and Bush's votes. To
+address this, we applied a logarithmic transformation to the model.
+
+Let \(log(Buchanan)\) denote the natural logarithm of the votes for
+Buchanan in Palm Beach County and \(log(Bush)\) denote the natural
+logarithm the votes for Bush in Palm Beach County. Our transformed
 linear regression model is:
-\[E[log(Buchanan) | log(Bush)] = \beta_0 + \beta_1\left(Bush\right).\]
+\[E[log(Buchanan) | log(Bush)] = \beta_0 + \beta_1log(Bush).\]where:
 
-The prediction interval is \([365, 831]\). We are 95\% confident that
-the votes for Buchanan when there are 152846 votes for Bush will fall
-between 365 votes and 831 votes.
+\begin{itemize}
+\item
+  \(\beta_0\) is the intercept of the model, representing the expected
+  value of \(log(Buchanan)\) when \(log(Bush) = 0\). Since
+  \(log(1) = 0\), this means \(\beta_0\) represents the expected value
+  of \(log(Buchanan)\) when the numbers of votes for Bush is 1.
+\item
+  \(\beta_1\) represents the elasticity of Buchanan's votes with respect
+  to Bush's votes. A 1\% increase in Bush's votes is associated with a
+  \(\beta_1\)\% change in Buchanan's votes.
+\end{itemize}
+
+The table below shows the summary statistics of the transformed linear
+regression model:
+
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{lcccc}
+\toprule
+  & Estimate & Std. Error & t value & Pr(>|t|)\\
+\midrule
+(Intercept) & -2.3415 & 0.3544 & -6.6066 & 0\\
+log(Bush2000) & 0.7310 & 0.0360 & 20.3229 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+From the table, our transformed linear regression model can be written
+as: \[E[log(Buchanan) | log(Bush)] = -2.34 + 0.73log(Bush).\] The
+standard error for the intercept and the slope is 0.35 and 0.036
+respectively according to the table.
+
+We proceeded to check the conditions for t-based inference with the
+transformed regression model above. The residual vs.~fitted value plot
+below allows us to check the Linearity and Equal Variance conditions:
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-9-1.pdf}
+
+The residuals vs.~fitted values plot indicates that both the Linearity
+and Equal Variance assumptions are now satisfied. The residuals scatter
+in random pattern around the \(y = 0\), satisfying the Linearity
+assumption. Additionally, the fitted values follow a more consistent
+vertical spread, indicating constant variance and satisfying the Equal
+Variance assumption.
+
+\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-10-1.pdf}
+
+The Q-Q plot suggests a significant improvement in the normality
+assumption. While the residuals slightly deviate from the reference line
+at the beginning, they align more closely in the middle, indicating that
+they approximately follow a normal distribution.
+
+We obtained a 95\% prediction interval for the number of predicted
+Buchanan votes in Palm Beach County using this transformed fitted model:
+
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{ccc}
+\toprule
+Fitted & Lower & Upper\\
+\midrule
+592 & 251 & 1399\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table above shows that yhe prediction interval is \([251, 1399]\).
+We are 95\% confident that the votes for Buchanan when there are 152846
+votes for Bush will fall between 251 votes and 1399 votes.
 
 Buchanan's real vote from Palm Beach County in 2000 election is 3407
 votes. Compared to the prediction interval above, we can calculate that
 an estimate for the likely number of votes intended for Gore but cast
-for Buchanan in Palm Beach County falls between \([2576, 3042]\).
+for Buchanan in Palm Beach County falls between \([2008, 3156]\).
 
-\subsubsection{Summary and Conclusions}\label{summary-and-conclusions}
+\hypertarget{summary-and-conclusions}{%
+\subsubsection{Summary and Conclusions}\label{summary-and-conclusions}}
 
 \textbf{Key Findings}
 
@@ -315,7 +452,7 @@ for Buchanan in Palm Beach County falls between \([2576, 3042]\).
   The Buchanan vote count in Palm Beach County during the 2000 election
   was statistically unusual.
 \item
-  An estimated 2,576 to 3,042 votes intended for Gore were likely
+  An estimated 2,008 to 3,156 votes intended for Gore were likely
   miscast for Buchanan.
 \item
   These results suggest that the ballot design may have altered the
@@ -345,7 +482,8 @@ for Buchanan in Palm Beach County falls between \([2576, 3042]\).
   butterfly ballot caused the excess Buchanan votes.
 \end{itemize}
 
-\subsection{R Appendix}\label{r-appendix}
+\hypertarget{r-appendix}{%
+\subsection{R Appendix}\label{r-appendix}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -360,34 +498,14 @@ for Buchanan in Palm Beach County falls between \([2576, 3042]\).
 
 \CommentTok{\# Summary statistics}
 \FunctionTok{summary}\NormalTok{(election }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(Bush2000, Buchanan2000))}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-    Bush2000       Buchanan2000   
- Min.   :  1316   Min.   :   9.0  
- 1st Qu.:  4746   1st Qu.:  46.5  
- Median : 20196   Median : 114.0  
- Mean   : 43356   Mean   : 258.5  
- 3rd Qu.: 56542   3rd Qu.: 285.5  
- Max.   :289456   Max.   :3407.0  
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Creating a scatterplot for the relationship between Bush and Buchanan votes}
 \NormalTok{election }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Bush2000,}
              \AttributeTok{y =}\NormalTok{ Buchanan2000)) }\SpecialCharTok{+}
   \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Association between Bush votes and Buchanan votes"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Creating a second dataset with Palm Beach County excluded}
 \NormalTok{election\_wo\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{!=} \StringTok{"Palm Beach"}\NormalTok{)}
@@ -396,17 +514,6 @@ for Buchanan in Palm Beach County falls between \([2576, 3042]\).
 \CommentTok{\# as a function of Bush votes}
 \NormalTok{election\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Buchanan2000 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Bush2000, }\AttributeTok{data =}\NormalTok{ election\_wo\_pb)}
 \FunctionTok{summary}\NormalTok{(election\_lm)}\SpecialCharTok{$}\NormalTok{coefficients}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-                Estimate   Std. Error   t value     Pr(>|t|)
-(Intercept) 65.573496362 1.733043e+01  3.783721 3.427131e-04
-Bush2000     0.003481898 2.500903e-04 13.922562 4.916245e-21
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{election\_lm\_table }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(election\_lm)}\SpecialCharTok{$}\NormalTok{coefficients}
 
 \CommentTok{\# Creating the table summarizing the estimated coefficients of the model }
@@ -418,25 +525,9 @@ Bush2000     0.003481898 2.500903e-04 13.922562 4.916245e-21
                          \AttributeTok{linesep=}\StringTok{""}\NormalTok{,}
                          \AttributeTok{digits =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"HOLD\_position"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{table}[H]
-\centering
-\begin{tabular}[t]{lcccc}
-\toprule
-  & Estimate & Std. Error & t value & Pr(>|t|)\\
-\midrule
-(Intercept) & 65.5735 & 17.3304 & 3.7837 & 3e-04\\
-Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Creating the residuals{-}fitted plot to check }
-\CommentTok{\# Linearity and Equal Variance for the election model}
+\CommentTok{\# Linearity and Equal Variance for the original election model}
 \NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .fitted, }\AttributeTok{y =}\NormalTok{ .resid)) }\SpecialCharTok{+}
@@ -445,14 +536,8 @@ Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
   \FunctionTok{xlab}\NormalTok{(}\StringTok{"Fitted Values"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{ylab}\NormalTok{(}\StringTok{"Residuals"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{theme\_bw}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-2.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Creating the Q{-}Q plot as check Normality for the election model}
+\CommentTok{\# Creating the Q{-}Q plot as check Normality for the original election model}
 \NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ .resid)) }\SpecialCharTok{+}
@@ -461,13 +546,7 @@ Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
   \FunctionTok{xlab}\NormalTok{(}\StringTok{"Theoretical Quantiles"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{ylab}\NormalTok{(}\StringTok{"Sample Quantiles"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{theme\_bw}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-3.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\#Transformation}
 \NormalTok{transformed\_election\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(Buchanan2000) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(Bush2000), election\_wo\_pb)}
 
@@ -481,13 +560,7 @@ Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
   \FunctionTok{xlab}\NormalTok{(}\StringTok{"Fitted Values"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{ylab}\NormalTok{(}\StringTok{"Residuals"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{theme\_bw}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-4.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Creating the Q{-}Q plot as check Normality for the transformed election model}
 \NormalTok{transformed\_election\_lm }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
@@ -497,13 +570,7 @@ Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
   \FunctionTok{xlab}\NormalTok{(}\StringTok{"Theoretical Quantiles"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{ylab}\NormalTok{(}\StringTok{"Sample Quantiles"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{theme\_bw}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
 
-\includegraphics{SDS-291-case-study-1_files/figure-pdf/unnamed-chunk-4-5.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Filter the original dataset to only Palm Beach Country}
 \CommentTok{\# to create prediction interval}
 \NormalTok{election\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{==} \StringTok{"Palm Beach"}\NormalTok{)}
@@ -511,20 +578,25 @@ Bush2000 & 0.0035 & 0.0003 & 13.9226 & 0e+00\\
 \CommentTok{\# Creating a 95\% prediction interval for the number of}
 \CommentTok{\# predicted Buchanan votes in Palm Beach County}
 \CommentTok{\# after knowing the votes for Bush from Palm Beach County}
+\CommentTok{\# and transform back the interval}
 \NormalTok{new\_election }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Bush2000 =} \DecValTok{152846}\NormalTok{)}
-\NormalTok{election\_lm }\SpecialCharTok{|\textgreater{}}
+\NormalTok{transformed\_election\_lm\_table\_2 }\OtherTok{\textless{}{-}}\NormalTok{ transformed\_election\_lm }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{augment}\NormalTok{(}\AttributeTok{newdata =}\NormalTok{ new\_election,}
           \AttributeTok{interval =} \StringTok{"prediction"}\NormalTok{,}
-          \AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{)}
+          \AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{".fitted"}\NormalTok{, }\StringTok{".lower"}\NormalTok{, }\StringTok{".upper"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \FunctionTok{exp}\NormalTok{()}
+
+\CommentTok{\# Creating the table summarizing the converted prediction interval}
+\CommentTok{\# of the transformed model}
+\NormalTok{transformed\_election\_lm\_table\_2 }\SpecialCharTok{|\textgreater{}} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Fitted"}\NormalTok{, }\StringTok{"Lower"}\NormalTok{,}
+                                       \StringTok{"Upper"}\NormalTok{), }
+                         \AttributeTok{align =} \StringTok{"c"}\NormalTok{,}
+                         \AttributeTok{booktabs =}\NormalTok{ T,}
+                         \AttributeTok{linesep=}\StringTok{""}\NormalTok{,}
+                         \AttributeTok{digits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"HOLD\_position"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-# A tibble: 1 x 4
-  Bush2000 .fitted .lower .upper
-     <dbl>   <dbl>  <dbl>  <dbl>
-1   152846    598.   365.   831.
-\end{verbatim}
 
 
 
