@@ -1,5 +1,5 @@
 ---
-title: "Case Study 1: Statistically Analyse the Anomaly in the U.S. 2000 Presidential Election"
+title: "Case Study 1: A Statistical Analysis of the Anomaly in the U.S. 2000 Presidential Election"
 author: "Miya Dang, Mia Tran"
 date: "Wednesday, March 5, 2025"
 format: 
@@ -82,31 +82,26 @@ Originally, we fitted a simple linear regression model for predicting Buchanan v
 
 -   $\beta_0$ is the intercept of the model, representing the expected value of the number of votes for Buchanan when the number of votes for Bush is 0.
 
-```{=html}
 <!-- -->
-```
+
 -   $\beta_1$ represents the percentage change in Buchanan's votes for a 1% increase in Bush's votes. The table below shows the summary statistics of the simple linear regression model:
 
 ```{r}
 #| echo: FALSE
+#| message: FALSE
+#| warning: false
 
 # Creating a second dataset with Palm Beach County excluded
 election_wo_pb <- election |>
   filter(County != "Palm Beach")
 
-# Fitting and summarizing the regression line for mean Buchanan votes 
+# Fitting the regression line for mean Buchanan votes 
 # as a function of Bush votes
 election_lm <- lm(Buchanan2000 ~ Bush2000, data = election_wo_pb)
-election_lm_table <- summary(election_lm)$coefficients
-```
-
-```{r}
-#| message: FALSE
-#| warning: false
-#| echo: FALSE
 
 # Creating the table summarizing the estimated coefficients of the model 
 # and their corresponding standard errors
+election_lm_table <- summary(election_lm)$coefficients
 election_lm_table |> kbl(col.names = c("Estimate", "Std. Error",
                                        "t value", "Pr(>|t|)"), 
                          align = "c",
@@ -114,6 +109,7 @@ election_lm_table |> kbl(col.names = c("Estimate", "Std. Error",
                          linesep="",
                          digits = c(4, 4, 4, 5)) |>
   kable_classic(full_width = F, latex_options = c("HOLD_position"))
+
 ```
 
 We proceeded to check the conditions for t-based inference with the simple linear regression model above. According to the data context, the Independence assumption is likely satisfied since the data consists of separate observations for each county in Florida (excluding Palm Beach County). Since each county reports its election results independently, the votes counted in one county do not directly influence the votes in another. Additionally, while counties may share some similarities, they operate as distinct political and administrative entities, each with its own local voting trends, demographics, and electoral processes, reducing the likelihood of systematic dependence between counties. The residual vs. fitted value plot below allows us to check the Linearity and Equal Variance conditions:
@@ -164,12 +160,12 @@ The table below shows the summary statistics of the transformed linear regressio
 ```{r}
 #| echo: FALSE
 
-#Transformation
+# Transformation
 transformed_election_lm <- lm(log(Buchanan2000) ~ log(Bush2000), election_wo_pb)
-transformed_election_lm_table_1 <- summary(transformed_election_lm)$coefficients
 
 # Creating the table summarizing the estimated coefficients of the model 
 # and their corresponding standard errors
+transformed_election_lm_table_1 <- summary(transformed_election_lm)$coefficients
 transformed_election_lm_table_1 |> kbl(col.names = c("Estimate", "Std. Error",
                                        "t value", "Pr(>|t|)"), 
                          align = "c",
@@ -179,7 +175,7 @@ transformed_election_lm_table_1 |> kbl(col.names = c("Estimate", "Std. Error",
   kable_classic(full_width = F, latex_options = c("HOLD_position"))
 ```
 
-From the table, our transformed linear regression model can be written as: $$E[log(Buchanan) | log(Bush)] = -2.34 + 0.73log(Bush).$$ The standard error for the intercept and the slope is 0.35 and 0.036 respectively according to the table.
+From the table, our transformed linear regression model can be written as: $$E[log(Buchanan) | log(Bush)] = -2.34 + 0.73log(Bush).$$ The standard error for the intercept and the slope is 0.354 and 0.036 respectively according to the table.
 
 We proceeded to check the conditions for t-based inference with the transformed regression model above. The residual vs. fitted value plot below allows us to check the Linearity and Equal Variance conditions:
 
@@ -251,9 +247,9 @@ transformed_election_lm_table_2 |> kbl(col.names = c("Fitted", "Lower",
   kable_classic(full_width = F, latex_options = c("HOLD_position"))
 ```
 
-The table above shows that yhe prediction interval is $[251, 1399]$. We are 95% confident that the votes for Buchanan when there are 152846 votes for Bush will fall between 251 votes and 1399 votes.
+The table above shows that the prediction interval is $[251, 1399]$. We are 95% confident that the votes for Buchanan when there are 152,846 votes for Bush (which is the number of votes for Bush in Palm Beach County) will fall between 251 votes and 1,399 votes.
 
-Buchanan's real vote from Palm Beach County in 2000 election is 3407 votes. Compared to the prediction interval above, we can calculate that an estimate for the likely number of votes intended for Gore but cast for Buchanan in Palm Beach County falls between $[2008, 3156]$.
+Buchanan's real vote from Palm Beach County in 2000 election is 3,407 votes. Compared to the prediction interval above, we can calculate that an estimate for the likely number of votes intended for Gore but cast for Buchanan in Palm Beach County falls between $[2008, 3156]$.
 
 ### Summary and Conclusions
 
@@ -267,7 +263,7 @@ Buchanan's real vote from Palm Beach County in 2000 election is 3407 votes. Comp
 
 **Limitations**
 
--   The log-log transformation assumes a multiplicative relationship between Bush and Buchanan votes. While this improved linearity, residual diagnostics revealed mild heteroscedasticity and a slightly left-skewed residual distribution. These imply that the prediction interval may underestimate uncertainty, particularly for counties with high Bush vote count like Palm Beach.
+-   The log-log transformation assumes a multiplicative relationship between Bush and Buchanan votes. While this transformation improved linearity, residual diagnostics revealed mild heteroscedasticity and a slightly left-skewed residual distribution. These imply that the prediction interval may underestimate uncertainty, particularly for counties with high Bush vote count like Palm Beach.
 
 -   The model assumes that voter behavior is similar across all counties. However, many other factors could contribute to regional differences between voter behavior, such as candidate campaigns or other demographic factors.
 
@@ -297,20 +293,21 @@ election |>
   ggplot(aes(x = Bush2000,
              y = Buchanan2000)) +
   geom_point() +
-  ggtitle("Association between Bush votes and Buchanan votes")
+  ggtitle("Association between Bush votes and Buchanan votes") +
+  xlab("Number of Votes for Bush") + ylab("Number of Votes for Buchanan")
 
 # Creating a second dataset with Palm Beach County excluded
 election_wo_pb <- election |>
   filter(County != "Palm Beach")
 
-# Fitting and summarizing the regression line for mean Buchanan votes 
+# Fitting the regression line for mean Buchanan votes 
 # as a function of Bush votes
 election_lm <- lm(Buchanan2000 ~ Bush2000, data = election_wo_pb)
-summary(election_lm)$coefficients
-election_lm_table <- summary(election_lm)$coefficients
+
 
 # Creating the table summarizing the estimated coefficients of the model 
 # and their corresponding standard errors
+election_lm_table <- summary(election_lm)$coefficients
 election_lm_table |> kbl(col.names = c("Estimate", "Std. Error",
                                        "t value", "Pr(>|t|)"), 
                          align = "c",
@@ -340,8 +337,19 @@ election_lm |>
   ylab("Sample Quantiles") +
   theme_bw()
 
-#Transformation
+# Transformation
 transformed_election_lm <- lm(log(Buchanan2000) ~ log(Bush2000), election_wo_pb)
+
+# Creating the table summarizing the estimated coefficients of the model 
+# and their corresponding standard errors
+transformed_election_lm_table_1 <- summary(transformed_election_lm)$coefficients
+transformed_election_lm_table_1 |> kbl(col.names = c("Estimate", "Std. Error",
+                                       "t value", "Pr(>|t|)"), 
+                         align = "c",
+                         booktabs = T,
+                         linesep="",
+                         digits = c(4, 4, 4, 4)) |>
+  kable_classic(full_width = F, latex_options = c("HOLD_position"))
 
 # Creating the residuals-fitted plot to check 
 # Linearity and Equal Variance for the transformed election model
